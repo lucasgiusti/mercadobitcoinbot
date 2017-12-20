@@ -26,16 +26,18 @@ function getQuantity(coin, price, isBuy, callback){
     (data) => console.log(data))
 }
 
+console.log('Robô: MercadoBitcoin');
+
 setInterval(() => 
    infoApi.ticker((tick) => {
-       console.log(tick)
-       if(tick.sell <= 50000){
-           getQuantity('BRL', tick.sell, true, (qty) => {
-                tradeApi.placeBuyOrder(qty, tick.sell, 
+       console.log(tick);
+       if(tick.ticker.sell <= 50000){
+           getQuantity('BRL', tick.ticker.sell, true, (qty) => {
+                tradeApi.placeBuyOrder(qty, tick.ticker.sell, 
                     (data) => {
                         console.log('Ordem de compra inserida no livro. ' + data)
                         //operando em STOP
-                        tradeApi.placeSellOrder(data.quantity, tick.sell * parseFloat(process.env.PROFITABILITY), 
+                        tradeApi.placeSellOrder(data.quantity, tick.ticker.sell * parseFloat(process.env.PROFITABILITY), 
                             (data) => console.log('Ordem de venda inserida no livro. ' + data),
                             (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
                     },
