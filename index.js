@@ -1,4 +1,7 @@
 //index.js
+const http = require('http');
+const urlApi = 'localhost';
+
 require("dotenv-safe").load()
 const MercadoBitcoin = require("./api").MercadoBitcoin
 const MercadoBitcoinTrade = require("./api").MercadoBitcoinTrade
@@ -9,6 +12,22 @@ var tradeApi = new MercadoBitcoinTrade({
     secret: process.env.SECRET, 
     pin: process.env.PIN 
 })
+
+function getValueBuy(){
+    var options = {
+        host: urlApi,
+        port: 3000,
+        path: '/products',
+        method: 'GET'
+      };
+      
+      http.request(options, function(res) {
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+          verifyNegociation(JSON.parse(chunk)[0].price);
+        });
+      }).end();
+}
 
 function getQuantity(coin, price, isBuy, callback){
     price = parseFloat(price)
@@ -26,26 +45,32 @@ function getQuantity(coin, price, isBuy, callback){
     (data) => console.log(data))
 }
 
-console.log('Robô: MercadoBitcoin');
+function verifyNegociation(price){
+    price = parseFloat(price)
+    infoApi.ticker((tick) => {
+        console.log('Value Buy: ' + price);
+        console.log(tick);
+        if(tick.ticker.sell <= price){
+            getQuantity('BRL', tick.ticker.sell, true, (qty) => {
+                 tradeApi.placeBuyOrder(qty, tick.ticker.sell, 
+                     (data) => {
+                         console.log('Ordem de compra inserida no livro. ' + data)
+                         //operando em STOP
+                         tradeApi.placeSellOrder(data.quantity, tick.ticker.sell * parseFloat(process.env.PROFITABILITY), 
+                             (data) => console.log('Ordem de venda inserida no livro. ' + data),
+                             (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
+                     },
+                     (data) => console.log('Erro ao inserir ordem de compra no livro. ' + data))
+            })
+        }
+        else
+             console.log('Ainda muito alto, vamos esperar pra comprar depois.')
+    })
+}
+
 
 setInterval(() => 
-   infoApi.ticker((tick) => {
-       console.log(tick);
-       if(tick.ticker.sell <= 50000){
-           getQuantity('BRL', tick.ticker.sell, true, (qty) => {
-                tradeApi.placeBuyOrder(qty, tick.ticker.sell, 
-                    (data) => {
-                        console.log('Ordem de compra inserida no livro. ' + data)
-                        //operando em STOP
-                        tradeApi.placeSellOrder(data.quantity, tick.ticker.sell * parseFloat(process.env.PROFITABILITY), 
-                            (data) => console.log('Ordem de venda inserida no livro. ' + data),
-                            (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
-                    },
-                    (data) => console.log('Erro ao inserir ordem de compra no livro. ' + data))
-           })
-       }
-       else
-            console.log('Ainda muito alto, vamos esperar pra comprar depois.')
-   }),
+    getValueBuy()   
+    ,
    process.env.CRAWLER_INTERVAL
 )
