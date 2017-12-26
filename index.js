@@ -36,7 +36,7 @@ function getQuantity(coin, price, isBuy, callback){
     tradeApi.getAccountInfo((response_data) => {
         var balance = parseFloat(response_data.balance[coin].available).toFixed(5)
 		balance = parseFloat(balance)
-        if(isBuy && balance < 50) return console.log('Sem saldo disponível para comprar!')
+        if(isBuy && balance < 60) return console.log('Sem saldo disponível para comprar!')
         console.log(`Saldo disponível de ${coin}: ${balance}`)
         
         if(isBuy) balance = parseFloat((balance / price).toFixed(5))
