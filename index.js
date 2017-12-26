@@ -40,7 +40,7 @@ function getQuantity(coin, price, isBuy, callback){
         console.log(`Saldo disponível de ${coin}: ${balance}`)
         
         if(isBuy) balance = parseFloat((balance / price).toFixed(5))
-        console.log(parseFloat(parseFloat(balance) - 0.00001).toFixed(5))
+        console.log('quantity buy: ' + parseFloat(parseFloat(balance) - 0.00001).toFixed(5))
         callback(parseFloat(parseFloat(balance) - 0.00001).toFixed(5))//tira a diferença que se ganha no arredondamento
     }, 
     (data) => console.log(data))
