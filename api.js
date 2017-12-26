@@ -45,7 +45,8 @@ var MercadoBitcoinTrade = function (config) {
         KEY: config.key,
         SECRET: config.secret,
         PIN: config.pin,
-        CURRENCY: config.currency
+        CURRENCY: config.currency,
+        TAPI_NONCE: Math.round(new Date().getTime() / 1000)
     }
 }
 
@@ -72,8 +73,8 @@ MercadoBitcoinTrade.prototype = {
     },
 
     call: function (method, parameters, success, error) {
-
-        var now = Math.round(new Date().getTime() / 1000)
+        this.config.TAPI_NONCE = this.config.TAPI_NONCE + 1
+        var now = this.config.TAPI_NONCE
         var queryString = qs.stringify({'tapi_method': method, 'tapi_nonce': now})
         if(parameters) queryString += '&' + qs.stringify(parameters)
 
