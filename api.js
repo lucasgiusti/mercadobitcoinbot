@@ -60,15 +60,15 @@ MercadoBitcoinTrade.prototype = {
     },
 
     placeBuyOrder: function(qty, limit_price, success, error){
-        this.call('place_buy_order', {coin_pair: `BRL${config.CURRENCY}`, quantity: (''+qty).substr(0,10), limit_price: ''+limit_price}, success, error)
+        this.call('place_buy_order', {coin_pair: `BRL${this.config.CURRENCY}`, quantity: (''+qty).substr(0,10), limit_price: ''+limit_price}, success, error)
     },
 
     placeSellOrder: function(qty, limit_price, success, error){
-        this.call('place_sell_order', {coin_pair: `BRL${config.CURRENCY}`, quantity: (''+qty).substr(0,10), limit_price: ''+limit_price}, success, error)
+        this.call('place_sell_order', {coin_pair: `BRL${this.config.CURRENCY}`, quantity: (''+qty).substr(0,10), limit_price: ''+limit_price}, success, error)
     },
 
     cancelOrder: function (orderId, success, error) {
-        this.call('cancel_order', {coin_pair: `BRL${config.CURRENCY}`, order_id: orderId}, success, error)
+        this.call('cancel_order', {coin_pair: `BRL${this.config.CURRENCY}`, order_id: orderId}, success, error)
     },
 
     call: function (method, parameters, success, error) {
