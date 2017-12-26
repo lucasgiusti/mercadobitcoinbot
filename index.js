@@ -40,6 +40,7 @@ function getQuantity(coin, price, isBuy, callback){
         console.log(`Saldo disponível de ${coin}: ${balance}`)
         
         if(isBuy) balance = parseFloat((balance / price).toFixed(5))
+        console.log(parseFloat(balance) - 0.00001)
         callback(parseFloat(balance) - 0.00001)//tira a diferença que se ganha no arredondamento
     }, 
     (data) => console.log(data))
@@ -48,7 +49,6 @@ function getQuantity(coin, price, isBuy, callback){
 function verifyNegociation(price){
     price = parseFloat(price)
     infoApi.ticker((tick) => {
-        console.log('Value Buy: ' + price);
         console.log(tick);
         if(tick.ticker.sell <= price){
             getQuantity('BRL', tick.ticker.sell, true, (qty) => {
