@@ -73,15 +73,17 @@ MercadoBitcoinTrade.prototype = {
     },
 
     call: function (method, parameters, success, error) {
-        if(method === 'place_sell_order'){
-        console.log('--------------------')
-        console.log(parameters)
-        console.log('--------------------')
-        }
+        
         this.config.TAPI_NONCE = this.config.TAPI_NONCE + 1
         var now = this.config.TAPI_NONCE
         var queryString = qs.stringify({'tapi_method': method, 'tapi_nonce': now})
         if(parameters) queryString += '&' + qs.stringify(parameters)
+
+        if(method === 'place_sell_order'){
+            console.log('--------------------')
+            console.log(queryString)
+            console.log('--------------------')
+            }
 
         var signature = crypto.createHmac('sha512', this.config.SECRET)
                             .update(ENDPOINT_TRADE_PATH + '?' + queryString)
