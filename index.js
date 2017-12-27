@@ -57,7 +57,7 @@ function verifyNegociation(price){
                          console.log('Ordem de compra inserida no livro. ' + JSON.stringify(data))
                          //operando em STOP
                          setTimeout(() =>                          
-                         tradeApi.placeSellOrder(data.order.quantity, tick.ticker.sell * parseFloat(process.env.PROFITABILITY), 
+                         tradeApi.placeSellOrder(data.order.quantity, parseFloat(tick.ticker.sell * parseFloat(process.env.PROFITABILITY)).toFixed(5), 
                              (data) => console.log('Ordem de venda inserida no livro. ' + JSON.stringify(data)),
                              (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
                              ,
