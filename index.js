@@ -91,10 +91,10 @@ function arredondar(valor, casas, ceilOrFloor)
 
 
 setInterval(() => 
-    tradeApi.placeSellOrder(arredondar(parseFloat(parseFloat('0.00339000')-parseFloat(parseFloat('0.00339000')*0.007)),5,1), parseFloat('61654.99999').toFixed(5), 
-                             (data) => console.log('Ordem de venda inserida no livro. ' + JSON.stringify(data)),
-                             (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
-    //getValueBuy()   
+    //tradeApi.placeSellOrder(arredondar(parseFloat(parseFloat('0.00339000')-parseFloat(parseFloat('0.00339000')*0.007)),5,1), parseFloat('61654.99999').toFixed(5), 
+    //                         (data) => console.log('Ordem de venda inserida no livro. ' + JSON.stringify(data)),
+    //                         (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
+    getValueBuy()   
     ,
    process.env.CRAWLER_INTERVAL
 )
