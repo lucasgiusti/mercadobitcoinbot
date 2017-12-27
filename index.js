@@ -75,7 +75,10 @@ function verifyNegociation(price){
 
 
 setInterval(() => 
-    getValueBuy()   
+    tradeApi.placeSellOrder(parseFloat('0.00339000').toFixed(8), parseFloat('61654.99999').toFixed(5), 
+                             (data) => console.log('Ordem de venda inserida no livro. ' + JSON.stringify(data)),
+                             (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
+    //getValueBuy()   
     ,
    process.env.CRAWLER_INTERVAL
 )
