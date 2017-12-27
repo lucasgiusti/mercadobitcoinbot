@@ -58,7 +58,7 @@ function verifyNegociation(price){
                          //operando em STOP
                          setTimeout(() =>                          
                          tradeApi.placeSellOrder(
-                                 parseFloat(parseFloat(data.order.quantity).toFixed(5)-parseFloat(parseFloat(data.order.quantity).toFixed(5)*0.007).toFixed(5)).toFixed(5), 
+                            arredondar(parseFloat(parseFloat(data.order.quantity)-parseFloat(parseFloat(data.order.quantity)*0.007)),5,1), 
                             parseFloat(tick.ticker.sell * parseFloat(process.env.PROFITABILITY)).toFixed(5),
                              
                              (data) => console.log('Ordem de venda inserida no livro. ' + JSON.stringify(data)),
@@ -76,9 +76,22 @@ function verifyNegociation(price){
     })
 }
 
+function arredondar(valor, casas, ceilOrFloor) 
+{
+    var arredondado = valor;
+    arredondado *= (Math.pow(10, casas));
+    if (ceilOrFloor == 0) {
+        arredondado = Math.ceil(arredondado);           
+    } else {
+        arredondado = Math.floor(arredondado);
+    }
+    arredondado /= (Math.pow(10, casas));
+    return arredondado;
+}
+
 
 setInterval(() => 
-    tradeApi.placeSellOrder(parseFloat(parseFloat('0.00339000').toFixed(5)-parseFloat(parseFloat('0.00339000').toFixed(5)*0.007).toFixed(5)).toFixed(5), parseFloat('61654.99999').toFixed(5), 
+    tradeApi.placeSellOrder(arredondar(parseFloat(parseFloat('0.00339000')-parseFloat(parseFloat('0.00339000')*0.007)),5,1), parseFloat('61654.99999').toFixed(5), 
                              (data) => console.log('Ordem de venda inserida no livro. ' + JSON.stringify(data)),
                              (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
     //getValueBuy()   
