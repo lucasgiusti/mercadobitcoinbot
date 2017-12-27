@@ -54,15 +54,15 @@ function verifyNegociation(price){
             getQuantity('BRL', tick.ticker.sell, true, (qty) => {
                  tradeApi.placeBuyOrder(qty, tick.ticker.sell, 
                      (data) => {
-                         console.log('Ordem de compra inserida no livro. ' + data)
+                         console.log('Ordem de compra inserida no livro. ' + JSON.stringify(data))
                          //operando em STOP
-                         
-                         setInterval(() =>                          
+                         console.log(data.quantity)
+                         setTimeout(() =>                          
                          tradeApi.placeSellOrder(data.quantity, tick.ticker.sell * parseFloat(process.env.PROFITABILITY), 
-                             (data) => console.log('Ordem de venda inserida no livro. ' + data),
+                             (data) => console.log('Ordem de venda inserida no livro. ' + JSON.stringify(data)),
                              (data) => console.log('Erro ao inserir ordem de venda no livro. ' + data))
                              ,
-                             process.env.CRAWLER_INTERVAL
+                             process.env.CRAWLER_INTERVAL / 2
                           )
 
                      },
